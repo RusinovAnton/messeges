@@ -1,0 +1,25 @@
+<ul>
+	{% for m in messages %}
+		<li>
+			{{ m.user.username }}: {{ m.message }} id: {{m.id}}
+			{% if m.thread %}has thread{% endif %}
+			<a href="{% url 'chat' %}?reply_to={{m.id}}">Reply</a>
+		</li>
+	{% endfor %}
+</ul>
+
+
+{% if reply_to %}
+	reply to {{reply_to.user.username}}: {{reply_to.message}}
+	<form action="{% url 'reply_to_message' reply_to.id %}" method="post">
+		{% csrf_token %}
+		<textarea id="message" name="message"></textarea>
+		<input type="submit" value="Send message">
+	</form>
+{% else %}
+	<form action="{% url 'send_message' %}" method="post">
+		{% csrf_token %}
+		<textarea id="message" name="message"></textarea>
+		<input type="submit" value="Send message">
+	</form>
+{% endif %}
