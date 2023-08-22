@@ -1,25 +1,63 @@
-<ul>
-	{% for m in messages %}
-		<li>
-			{{ m.user.username }}: {{ m.message }} id: {{m.id}}
-			{% if m.thread %}has thread{% endif %}
-			<a href="{% url 'chat' %}?reply_to={{m.id}}">Reply</a>
-		</li>
-	{% endfor %}
-</ul>
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
 
+  <head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="keywords" content="chat, messages"/>
+    <meta name="description" content="simpel chat application with Django4 and HTMX 🥱"/>
+    <title>messeges</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="crossorigin"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;600&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="{% static 'style.css' %}"/>
+  </head>
 
-{% if reply_to %}
-	reply to {{reply_to.user.username}}: {{reply_to.message}}
-	<form action="{% url 'reply_to_message' reply_to.id %}" method="post">
-		{% csrf_token %}
-		<textarea id="message" name="message"></textarea>
-		<input type="submit" value="Send message">
-	</form>
-{% else %}
-	<form action="{% url 'send_message' %}" method="post">
-		{% csrf_token %}
-		<textarea id="message" name="message"></textarea>
-		<input type="submit" value="Send message">
-	</form>
-{% endif %}
+  <body>
+    <main>
+      <div class="container">
+        <h1>Messeges</h1>
+        <ul class="messages-list">
+          {% for m in messages %}
+            <li class="messages-list--item{% if request.user.id == m.user.id %} message-list-item--you{% endif %}">
+              <div class="message-bubble">
+                <strong class="message-username" data-text-color="{{ m.user.username }}">
+                  {% if request.user.id == m.user.id %}
+                    you
+                  {% else %}
+                    {{ m.user.username }}
+                  {% endif %}:
+                </strong>
+                <span class="message-text">{{ m.message }}</span>
+                <small class="sentat-time">{{ m.sent_at|time:"H:i:s" }}</small>
+                {% if m.thread %}has thread{% endif %}
+                <a href="{% url 'chat' %}?reply_to={{ m.id }}">Reply</a>
+              </div>
+            </li>
+          {% endfor %}
+        </ul>
+        {% if reply_to %}
+          <p>
+            >
+            <span data-text-color="{{ reply_to.user.username }}">{{ reply_to.user.username }}</span>:
+            {{ reply_to.message }}
+          </p>
+          <form action="{% url 'reply_to_message' reply_to.id %}" method="post">
+            {% csrf_token %}
+            <textarea id="message" name="message"></textarea>
+            <input type="submit" class="btn" value="Send message"/>
+          </form>
+        {% else %}
+          <form action="{% url 'send_message' %}" method="post">
+            {% csrf_token %}
+            <textarea id="message" name="message"></textarea>
+            <input type="submit" class="btn" value="Send message"/>
+          </form>
+        {% endif %}
+      </div>
+    </main>
+    <script src="{% static 'index.js' %}"></script>
+  </body>
+
+</html>

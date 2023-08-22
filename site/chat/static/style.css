@@ -1,0 +1,63 @@
+:root {
+  margin: 0;
+  padding: 0;
+  font-family: "Inconsolata", monospace;
+
+  --message-bubble-bg: #eee;
+  --message-bubble-you-bg: #d6ebf1;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  margin-top: 0;
+}
+
+input,
+textarea {
+  font-family: inherit;
+}
+
+.container {
+  margin: 0 auto;
+  max-width: 640px;
+  padding: 0 1rem;
+}
+
+.messages-list {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.messages-list--item {
+  display: flex;
+}
+
+.message-list-item--you .message-bubble {
+  background-color: #d6ebf1;
+}
+
+.message-bubble {
+  background-color: #eee;
+  border-radius: 0.5rem;
+  display: inline-block;
+  margin: 0.5rem 0;
+  padding: 0.5rem 1rem;
+}
+
+.btn {
+	background-color: blue;
+	border: 0;
+	border-radius: 0.5rem;
+	cursor: pointer;
+	display: inline-block;
+	font-size: 1rem;
+	margin: 0.5rem 0;
+	padding: 0.5rem 1rem;
+	color: #fff;
+}
