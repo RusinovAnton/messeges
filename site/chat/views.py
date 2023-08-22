@@ -1,13 +1,9 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseForbidden
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Message, Thread
 
 
 def index(request):
-    user = request.user
-    if user.is_anonymous:
-        return redirect("signin")
-
     messages = (
         Message.objects.select_related("user")
         .filter(parent_thread__isnull=True)
@@ -30,15 +26,20 @@ def index(request):
 
 
 def send_message(request):
+    if not request.user.is_authenticated:
+        return HttpResponseForbidden()
+
     message_text = request.POST["message"]
     message = Message(message=message_text, user=request.user)
     message.save()
-    print(message)
 
     return redirect("chat")
 
 
 def reply_to_message(request, message_id):
+    if not request.user.is_authenticated:
+        return HttpResponseForbidden()
+
     started_from = get_object_or_404(Message, pk=message_id)
 
     message_text = request.POST["message"]
@@ -54,3 +55,8 @@ def reply_to_message(request, message_id):
     thread.save()
 
     return redirect("chat")
+
+def thread(request, thread_id):
+    thread = get_object_or_404(Thread, pk=thread_id)
+    messages = thread.messages.all()
+    return redirect('chat')

@@ -17,10 +17,10 @@
   <body>
     <main>
       <div class="container">
-        <h1>Messeges</h1>
+        <h1>Messeges 🫣</h1>
         <ul class="messages-list">
           {% for m in messages %}
-            <li class="messages-list--item{% if request.user.id == m.user.id %} message-list-item--you{% endif %}">
+            <li id="message-{{m.id}}" class="messages-list--item{% if request.user.id == m.user.id %} message-list-item--you{% endif %}">
               <div class="message-bubble">
                 <strong class="message-username" data-text-color="{{ m.user.username }}">
                   {% if request.user.id == m.user.id %}
@@ -31,30 +31,50 @@
                 </strong>
                 <span class="message-text">{{ m.message }}</span>
                 <small class="sentat-time">{{ m.sent_at|time:"H:i:s" }}</small>
-                {% if m.thread %}has thread{% endif %}
-                <a href="{% url 'chat' %}?reply_to={{ m.id }}">Reply</a>
+                <a href="{% url 'chat' %}?reply_to={{ m.id }}#message-{{m.id}}">Reply</a>
               </div>
+							{% if m.thread %}
+								<a href="{% url 'thread' m.thread.id %}" class="no-decoration">⤵️</a>
+							{% endif %}
             </li>
           {% endfor %}
         </ul>
-        {% if reply_to %}
-          <p>
-            >
-            <span data-text-color="{{ reply_to.user.username }}">{{ reply_to.user.username }}</span>:
-            {{ reply_to.message }}
-          </p>
-          <form action="{% url 'reply_to_message' reply_to.id %}" method="post">
-            {% csrf_token %}
-            <textarea id="message" name="message"></textarea>
-            <input type="submit" class="btn" value="Send message"/>
-          </form>
-        {% else %}
-          <form action="{% url 'send_message' %}" method="post">
-            {% csrf_token %}
-            <textarea id="message" name="message"></textarea>
-            <input type="submit" class="btn" value="Send message"/>
-          </form>
-        {% endif %}
+        {% if user.is_authenticated %}
+					<div class="message-form-container">
+						{% if reply_to %}
+		          <div >
+								<p>
+			            >
+			            <span data-text-color="{{ reply_to.user.username }}">{{ reply_to.user.username }}</span>:
+			            {{ reply_to.message }}
+									<a href="{% url 'chat' %}" class="no-decoration">❌</a>
+			          </p>
+			          <form id="reply-form" action="{% url 'reply_to_message' reply_to.id %}" method="post">
+			            {% csrf_token %}
+			            <div class="message-textarea">
+										<textarea autofocus id="message" name="message"></textarea>
+										<button class="btn">💬 Reply</button>
+									</div>
+			          </form>
+							</div>
+		        {% else %}
+		          <form id="message-form" action="{% url 'send_message' %}" method="post">
+		            {% csrf_token %}
+		            <div class="message-textarea">
+									<textarea autofocus id="message" name="message"></textarea>
+									<button class="btn">💬 Send message</button>
+								</div>
+		          </form>
+		        {% endif %}
+					</div>
+				{% else %}
+					<form action="{% url 'auth' %}" method="post" id="auth-form">
+						{% csrf_token %}
+						<input type="text" name="username" placeholder="username"/>
+						<input type="password" name="password" placeholder="password"/>
+						<button class="btn">🔑 Login</button>
+					</form>
+				{% endif %}
       </div>
     </main>
     <script src="{% static 'index.js' %}"></script>

@@ -1,0 +1,17 @@
+__pycache__
+
+.*
+*pyc
+*csv
+*sql
+logs
+tags
+/virt/
+build
+cadmin.py
+dump.rdb
+media/
+dbdata/
+metabase/dbdata
+metabase/plugins
+sitemap.xml
