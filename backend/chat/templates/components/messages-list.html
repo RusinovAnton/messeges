@@ -1,0 +1,14 @@
+{% if room_name %}
+  <h1 id="room-name">{{ room_name }}</h1>
+{% else %}
+  <h1 id="title">Messeges 🫣</h1>
+{% endif %}
+
+<script src="https://unpkg.com/htmx.org/dist/ext/ws.js"></script>
+<ul id="messages-list" class="messages-list" hx-ext="ws"  ws-connect="ws://{{ request.get_host }}/ws/chat/{{ room_name|default_if_none:'default' }}/" hx-swap="beforeend">
+  {% for m in messages %}
+    {% include "components/messages-list-item.html" with message=m %}
+  {% endfor %}
+</ul>
+
+<div id="chat-log"></div>

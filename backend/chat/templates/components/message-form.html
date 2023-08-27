@@ -1,0 +1,45 @@
+{% if user.is_authenticated %}
+  <div class="message-form-container">
+    {% if reply_to %}
+      <div>
+        <p>
+          >
+          <span data-text-color="{{ reply_to.user.username }}">{{ reply_to.user.username }}</span>:
+          {{ reply_to.message }}
+          <a href="{% url 'chat' %}" class="no-decoration">❌</a>
+        </p>
+        <form id="reply-form"
+              action="{% url 'reply_to_message' reply_to.id %}"
+              method="post">
+          {% csrf_token %}
+          <input type="hidden" name="return_url" value="{{ request.path }}">
+          {% if room %}
+            <input type="hidden" name="room_id" value="{{ room.id }}">
+          {% endif %}
+          <div class="message-textarea">
+            <textarea autofocus id="message" name="message"></textarea>
+            <button class="btn">💬 Reply</button>
+          </div>
+        </form>
+      </div>
+    {% else %}
+      <form id="message-form" action="{% url 'send_message' %}" method="post">
+        {% csrf_token %}
+        {% if room %}
+          <input type="hidden" name="room_id" value="{{ room.id }}">
+        {% endif %}
+        <div class="message-textarea">
+          <textarea autofocus id="message" name="message"></textarea>
+          <button class="btn">💬 Send message</button>
+        </div>
+      </form>
+    {% endif %}
+  </div>
+{% else %}
+  <form action="{% url 'auth' %}" method="post" id="auth-form">
+    {% csrf_token %}
+    <input type="text" name="username" placeholder="username" />
+    <input type="password" name="password" placeholder="password" />
+    <button class="btn">🔑 Login</button>
+  </form>
+{% endif %}

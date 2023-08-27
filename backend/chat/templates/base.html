@@ -1,0 +1,35 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="keywords" content="chat, messages"/>
+    <meta name="description" content="simpel chat application with Django4 and HTMX 🥱"/>
+    <title>😬 messeges</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="crossorigin"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;600&display=swap" rel="stylesheet"/>
+		<link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon.ico' %}"/>
+
+		{% block styles %}
+			<link rel="stylesheet" href="{% static 'style.css' %}"/>
+		{% endblock styles %}
+
+    <script src="https://unpkg.com/htmx.org@1.9.5"></script>
+  </head>
+
+  <body>
+    <main>
+      <div class="container">
+        {% block main %}
+				{% endblock main %}
+			</div>
+    </main>
+		{% block scripts %}
+    	<script src="{% static 'index.js' %}"></script>
+		{% endblock scripts %}
+  </body>
+
+</html>

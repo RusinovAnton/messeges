@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block main %}
+	<header>
+		<a href="{% url 'chat' %}">⬅️ back to chat</a>
+	</header>
+	{% include "components/messages-list-item.html" with message=started_from %}
+	<div style="padding-left: 2rem;">
+		{% include "components/messages-list.html" %}
+	</div>
+	{% include 'components/message-form.html' with reply_to=started_from user=request.user %}
+{% endblock main %}

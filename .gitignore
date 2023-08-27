@@ -15,3 +15,5 @@ dbdata/
 metabase/dbdata
 metabase/plugins
 sitemap.xml
+
+node_modules/

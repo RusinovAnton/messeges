@@ -1,0 +1,19 @@
+<li id="message-{{message.id}}" class="messages-list--item{% if request.user.id == message.user.id %} message-list-item--you{% endif %}">
+  <div class="message-bubble">
+    {% spaceless %}
+			<strong class="message-username" data-text-color="{{ message.user.username }}">
+				{% if request.user.id == message.user.id %}
+          {% spaceless %}you{% endspaceless %}
+        {% else %}
+          {{ message.user.username }}
+        {% endif %}
+    	</strong>
+		{% endspaceless %}:
+    <span class="message-text">{{ message.message }}</span>
+    <small class="sentat-time">{{ message.sent_at|time:"H:i:s" }}</small>
+    <a href="{% url 'chat' %}?reply_to={{ message.id }}">Reply</a>
+  </div>
+	{% if message.thread %}
+		<a href="{% url 'thread' message.thread.id %}" class="no-decoration">⤵️</a>
+	{% endif %}
+</li>
