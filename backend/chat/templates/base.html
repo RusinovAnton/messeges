@@ -23,6 +23,12 @@
   <body>
     <main>
       <div class="container">
+        {% if room_name %}
+          <h1 id="room-name">{{ room_name }}</h1>
+        {% else %}
+          <h1 id="title">Messeges 🫣</h1>
+        {% endif %}
+
         {% block main %}
 				{% endblock main %}
 			</div>

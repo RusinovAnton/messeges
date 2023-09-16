@@ -1,6 +1,7 @@
 __pycache__
 .venv
 .*
+!.env.example
 *pyc
 *csv
 *sql
